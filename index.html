@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>GEO BOWLING 3D — Cabaran Geografi</title>
+<title>SPM Percubaan Negeri Sarawak — Objektif | Geo Bowling 3D</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Bungee&display=swap" rel="stylesheet">
@@ -43,19 +43,19 @@ h1{font-family:Bungee,sans-serif;color:#fcd34d;line-height:1.2;margin:10px 0 14p
 <body>
 <div id="canvas-container"></div>
 <header id="hud" class="hidden">
-  <div class="glass hud"><div id="level-badge" class="badge">1</div><div><div class="small">Level <span id="level-num">1</span>/5</div><strong id="theme-name">Pusat Bowling Geografi</strong></div></div>
+  <div class="glass hud"><div id="level-badge" class="badge">1</div><div><div class="small">SOALAN <span id="level-num">1</span>/40</div><strong id="theme-name">Cabaran Geografi</strong></div></div>
   <div style="display:flex;gap:7px;align-items:center">
-    <div class="glass hud" style="display:block;text-align:center"><div class="small">Pusingan</div><div class="value"><span id="round-num">1</span>/8</div></div>
-    <div class="glass hud" style="display:block;text-align:center"><div class="small">Markah</div><div class="value"><span id="score-num">0</span><span style="font:11px sans-serif;color:#cbd5e1">/80</span></div></div>
+    <div class="glass hud" style="display:block;text-align:center"><div class="small">Soalan</div><div class="value"><span id="round-num">1</span>/40</div></div>
+    <div class="glass hud" style="display:block;text-align:center"><div class="small">Markah</div><div class="value"><span id="score-num">0</span><span style="font:11px sans-serif;color:#cbd5e1"> pin</span></div></div>
     <button id="sound-btn" class="glass" style="padding:10px;font-size:18px" aria-label="Muzik dan bunyi">🎵🔊</button>
   </div>
 </header>
 <div id="mascot" class="hidden">🐨 <span id="mascot-text" class="glass" style="font-size:14px;padding:7px 10px;vertical-align:middle">Jom belajar!</span></div>
 <div id="start-modal" class="overlay">
  <div class="panel glass"><div class="rainbow"></div><div style="font-size:64px;margin-top:8px">🎳🌍</div>
-  <h1>GEO BOWLING 3D</h1>
-  <p>Jawab soalan Geografi, kemudian sasar dan slide bola untuk menjatuhkan pin! Kumpul markah dalam 5 level yang mencabar.</p>
-  <p style="font-size:13px;color:#cbd5e1">10 pusingan setiap level • 40 soalan objektif • ulang kaji Geografi SPM 2026</p>
+  <h1>SPM PERCUBAAN<br>NEGERI SARAWAK<br>OBJEKTIF</h1>
+  <p>Jawab soalan Geografi, kemudian sasar dan slide bola untuk menjatuhkan pin! Jawab 40 soalan objektif SPM Percubaan Negeri Sarawak sambil bermain bowling!</p>
+  <p style="font-size:13px;color:#cbd5e1">40 soalan objektif tanpa pembahagian bahagian • muzik latar dan kesan bunyi</p>
   <button id="start-btn" class="primary">MULA PERMAINAN ▶</button>
  </div>
 </div>
@@ -72,32 +72,32 @@ h1{font-family:Bungee,sans-serif;color:#fcd34d;line-height:1.2;margin:10px 0 14p
  <div id="result-title">STRIKE!</div><div id="result-sub">Semua 10 pin jatuh!</div>
  <div style="font-size:35px;margin:7px">🎳</div><strong id="result-points" style="font:22px Bungee;color:#fcd34d">+10 MARKAH</strong>
 </div>
-<div id="level-intro" class="glass hidden"><div id="intro-emoji" style="font-size:56px">🎳</div><div class="small">LEVEL <span id="intro-num">1</span></div><h1 id="intro-name" style="font-size:25px">PUSAT BOWLING</h1><p id="intro-tag">Bersedia untuk cabaran!</p></div>
+<div id="level-intro" class="glass hidden"><div id="intro-emoji" style="font-size:56px">🎳</div><div class="small">CABARAN GEOGRAFI</div><h1 id="intro-name" style="font-size:25px">BERSIAP SEDIA!</h1><p id="intro-tag">40 soalan dalam satu permainan</p></div>
 <div id="summary-modal" class="overlay hidden">
- <div class="panel glass"><div class="rainbow"></div><div id="summary-icon" style="font-size:60px;margin-top:7px">🏆</div><h1 id="summary-title">LEVEL SELESAI!</h1><p id="summary-desc">Syabas!</p>
+ <div class="panel glass"><div class="rainbow"></div><div id="summary-icon" style="font-size:60px;margin-top:7px">🏆</div><h1 id="summary-title">KEPUTUSAN AKHIR GEOGRAFI!</h1><p id="summary-desc">Syabas!</p>
  <div id="summary-stats"><div class="stat"><span class="small">Markah level</span><strong id="summary-score">0/100</strong></div><div class="stat"><span class="small">Ketepatan</span><strong id="summary-accuracy">0%</strong></div></div>
  <div id="summary-stars" style="font-size:30px;margin:12px">⭐⭐⭐</div><button id="next-btn" class="primary">LEVEL SETERUSNYA ➡</button>
  </div>
 </div>
 <script>
-/* 40 soalan objektif berdasarkan PDF Trial Geografi Kertas 1 Sarawak SPM 2026. Jawapan diselaraskan dengan gambar skema yang diberikan. */
+/* 40 soalan objektif berdasarkan PDF Trial Geografi Kertas 1 Sarawak SPM 2026. Indeks jawapan mengikut jadual skema yang diberikan. */
 const LEVELS=[
  {name:"Bumi dan Proses Fizikal",emoji:"🌍",tag:"Struktur bumi, batuan dan luluhawa",decor:"alley",floor:0x8b5cf6,ball:0xef4444,qs:[
  ["Di lapisan manakah terdapat arus perolakan yang menyebabkan pergerakan plat tektonik?",["P","Q","R","S"],1],
- ["Antara berikut, yang manakah langkah efektif mengurangkan kesan gempa bumi di darat?",["I dan II","I dan IV","II dan III","III dan IV"],2],
+ ["Antara berikut, yang manakah langkah efektif mengurangkan kesan gempa bumi di darat? I Memasang alat pengesan gempa; II Mengadakan latihan menghadapi bencana alam; III Membina bangunan kalis gempa bumi; IV Mewujudkan zon penampan.",["I dan II","I dan IV","II dan III","III dan IV"],2],
  ["Rajah menunjukkan serpihan batuan dan sisa tumbuhan menjadi batuan enapan. Apakah Proses X?",["Pemecahan","Penyejukan","Penghakisan","Pemendapan"],3],
  ["Mengapakah sumber batuan penting terhadap pembangunan negara?",["Batu kapur untuk bahan penebat bunyi","Batu pasir untuk pembuatan simen","Batu granit untuk pembinaan bangunan","Batu marmar untuk barang perhiasan wanita"],2],
  ["Apakah faktor yang mempengaruhi proses luluhawa berdasarkan pernyataan: luluhawa fizikal dominan di gurun dan luluhawa kimia aktif di tropika lembap?",["Masa","Iklim","Biotik","Batuan"],1],
  ["Apakah proses luluhawa yang menghasilkan tanah laterit?",["Hidrolisis","Penghidratan","Pengoksidaan","Pengkarbonan"],2],
- ["Antara berikut, yang manakah kesan tragedi tanah runtuh terhadap manusia?",["I dan II","I dan IV","II dan III","III dan IV"],0],
+ ["Antara berikut, yang manakah kesan tragedi tanah runtuh terhadap manusia? I Mengorbankan nyawa; II Merosakkan kereta; III Menyuburkan tanaman; IV Melancarkan lalu lintas.",["I dan II","I dan IV","II dan III","III dan IV"],0],
  ["Apakah langkah yang boleh dilaksanakan untuk mengelakkan kejadian tanah runtuh berulang?",["Membina jalan untuk pejalan kaki","Membuat sistem pemparitan","Menanam tutup bumi","Memacak cerucuk"],2]
  ]},
  {name:"Sungai, Ombak dan Pinggir Pantai",emoji:"🌊",tag:"Proses sungai dan tindakan ombak",decor:"beach",floor:0xc0843d,ball:0x06b6d4,qs:[
  ["Kombinasi yang manakah benar tentang profil panjang sungai?",["Jeram — Tasik ladam — Delta","Air terjun — Jeram — Dataran banjir","Likuan sungai — Lurah bentuk V — Lurah bentuk U","Lubang periuk — Susuh bukit berpanca — Likuan terpenggal"],3],
- ["Antara berikut, yang manakah punca kemerosotan kualiti sungai Rajang, Sarawak?",["I dan II","I dan IV","II dan III","III dan IV"],1],
+ ["Antara berikut, yang manakah punca kemerosotan kualiti sungai Rajang, Sarawak? I Penggunaan baja kimia; II Perlombongan petroleum; III Pembinaan rumah panjang; IV Pembuangan sisa domestik.",["I dan II","I dan IV","II dan III","III dan IV"],1],
  ["Apakah jenis hakisan ombak yang melibatkan bahan muatan ombak menghentam kaki cenuram?",["Tindakan hidraul","Tindakan larutan","Tindakan lagaan","Tindakan lelasan"],3],
  ["Apakah kesan aktiviti berikut terhadap alam sekitar: aktiviti ternakan dan penebangan pokok bakau?",["Perubahan aras laut","Zon penampan musnah","Terumbu karang terganggu","Kekuatan ombak berkurangan"],1],
- ["Cadangkan langkah mengawal masalah hakisan pinggir pantai di negara kita.",["Mendalamkan kawasan pinggir laut","Mengekalkan kawasan pokok bakau","Membina tembok penahan ombak","Mewartakan taman laut"],2],
+ ["Cadangkan langkah mengawal masalah hakisan pinggir pantai di negara kita. I Mendalamkan kawasan pinggir laut; II Mengekalkan kawasan pokok bakau; III Membina tembok penahan ombak; IV Mewartakan taman laut.",["I dan II","I dan IV","II dan III","III dan IV"],2],
  ["Kombinasi manakah yang benar tentang taburan penduduk dunia?",["Jarang — Manchester, England","Padat — Mount Pope, Myanmar","Jarang — Prairie, Kanada","Padat — Lembangan Nil, Mesir"],3],
  ["Mengapakah kawasan dalam foto bersalji itu berpenduduk jarang?",["Bertanah pamah","Bertanih subur","Bersaliran baik","Beriklim tundra"],3],
  ["Apakah faktor yang menyebabkan kadar pertumbuhan penduduk menurun?",["Migrasi masuk yang tinggi","Peningkatan kadar kelahiran","Kekurangan bekalan makanan","Perkembangan teknologi perubatan"],2]
@@ -114,7 +114,7 @@ const LEVELS=[
  ]},
  {name:"Cuaca, Iklim dan Hutan",emoji:"🌦️",tag:"Fenomena alam dan ekosistem",decor:"volcano",floor:0x57534e,ball:0x8b5cf6,qs:[
  ["Manakah antara berikut merupakan kesan fenomena taufan terhadap kawasan pinggir pantai?",["Krisis bekalan air","Zon penampan musnah","Sungai cetek dan sempit","Kekurangan kawasan tadahan"],2],
- ["Antara berikut, apakah langkah persediaan menghadapi fenomena kemarau di India?",["I dan II","I dan IV","II dan III","III dan IV"],2],
+ ["Antara berikut, apakah langkah persediaan menghadapi fenomena kemarau di India? I Mencatu bekalan air bersih; II Membeli bekalan air dari luar negara; III Pembangunan jaringan paip bawah tanah; IV Meneroka sumber telaga air bawah tanah.",["I dan II","I dan IV","II dan III","III dan IV"],2],
  ["Peta dunia menunjukkan kawasan berwarna. Apakah zon iklim di kawasan berlorek?",["Zon Sejuk","Zon Panas","Zon Sejuk Sederhana","Zon Panas Sederhana"],3],
  ["Mengapakah kegiatan pembalakan dilakukan pada musim sejuk di kawasan beriklim sejuk sederhana?",["Mengelakkan kerosakan tanih","Pokok menggugurkan daun","Tenaga kerja yang ramai","Getah pokok membeku"],3],
  ["Berdasarkan rajah empat lapisan hutan hujan tropika, apakah lapisan Q?",["Kanopi","Tengah","Renjong","Lantai hutan"],0],
@@ -135,7 +135,7 @@ const LEVELS=[
 ];
 const $=id=>document.getElementById(id);
 let scene,camera,renderer,ball,pins=[],lane,decor=[],raf;
-let level=0,round=1,score=0,totalScore=0,correct=0,asked=0,answered=false,canThrow=false,rolling=false,soundOn=true,ballX=0,dragX=0,dragY=0,dragging=false,activeQuestion=null,usedQuestions=[],animating=false;
+let level=0,round=1,score=0,totalScore=0,correct=0,asked=0,totalCorrect=0,totalAsked=0,answered=false,canThrow=false,rolling=false,soundOn=true,ballX=0,dragX=0,dragY=0,dragging=false,activeQuestion=null,usedQuestions=[],animating=false;
 const pinPositions=[[-.54,-.34],[-.18,-.34],[.18,-.34],[.54,-.34],[-.72,-.68],[-.24,-.68],[.24,-.68],[.72,-.68],[-.36,-1.02],[.36,-1.02]];
 /* Audio permainan: muzik ceria dan kesan bunyi dijana dalam pelayar */
 let audioCtx=null, musicTimer=null, musicStep=0, musicOn=true;
@@ -177,7 +177,7 @@ function resize(){camera.aspect=innerWidth/innerHeight;camera.updateProjectionMa
 function loop(){raf=requestAnimationFrame(loop);const t=performance.now()*.001;decor.forEach(fn=>fn(t));renderer.render(scene,camera)}
 function mascot(text){$('mascot').classList.remove('hidden');$('mascot-text').textContent=text}
 function showQuiz(){
- answered=false;canThrow=false;rolling=false;activeQuestion=pickQuestion();$('quiz-round').textContent=round;$('quiz-question').textContent=activeQuestion.q;$('feedback').textContent='';$('quiz-choices').innerHTML='';
+ answered=false;canThrow=false;rolling=false;activeQuestion=pickQuestion();$('quiz-round').textContent=(level*8)+round;$('quiz-question').textContent=activeQuestion.q;$('feedback').textContent='';$('quiz-choices').innerHTML='';
  activeQuestion.options.forEach((txt,i)=>{const b=document.createElement('button');b.className='choice';b.textContent=String.fromCharCode(65+i)+'. '+txt;b.onclick=()=>answer(i,b);$('quiz-choices').appendChild(b)});
  $('quiz-modal').classList.remove('hidden');$('aim-panel').classList.add('hidden');$('mascot').classList.remove('hidden');mascot('Jom jawab soalan Geografi!');
 }
@@ -212,26 +212,24 @@ function throwBall(power){
 }
 let lastAnswerCorrect=true;
 const originalAnswer=answer;
-answer=function(i,b){const good=i===activeQuestion.correct;lastAnswerCorrect=good;originalAnswer(i,b)};
+answer=function(i,b){const good=i===activeQuestion.correct;lastAnswerCorrect=good;totalAsked++;if(good)totalCorrect++;originalAnswer(i,b)};
 function showResult(knocked){
  score+=knocked;totalScore+=knocked;$('score-num').textContent=score;const title=knocked===10?'STRIKE!':knocked>=7?'HEBAT!':knocked>0?'BAGUS!':'CUBA LAGI!';
  $('result-title').textContent=title;$('result-sub').textContent=knocked===10?'Sempurna! Semua 10 pin jatuh!':`${knocked} pin jatuh, ${10-knocked} pin masih berdiri.`;$('result-points').textContent='+'+knocked+' MARKAH';$('result-banner').classList.remove('hidden');if(knocked>0)pinCrash();sound(knocked>=7?850:360,.25);if(knocked>=7&&window.confetti)confetti({particleCount:75,spread:75,origin:{y:.4}});
  setTimeout(()=>{$('result-banner').classList.add('hidden');advanceRound()},2100);
 }
 function resetPins(){pins.forEach(p=>{p.position.set(p.userData.baseX,0,p.userData.baseZ);p.rotation.set(0,0,0);p.userData.down=false});ballX=0;ball.position.set(0,.31,1.5);camera.position.set(0,3.2,6.4);camera.lookAt(0,.4,-9)}
-function advanceRound(){round++;if(round>8){showSummary()}else{$('round-num').textContent=round;resetPins();showQuiz()}}
+function advanceRound(){round++;if(round>8){if(level<4){loadLevel(level+1,false)}else{showSummary()}}else{$('round-num').textContent=(level*8)+round;resetPins();showQuiz()}}
 function showSummary(){
- const accuracy=asked?Math.round(correct/asked*100):0;$('summary-score').textContent=score+'/80';$('summary-accuracy').textContent=accuracy+'%';$('summary-stars').textContent='⭐'.repeat(accuracy>=80?3:accuracy>=50?2:1)+'☆'.repeat(accuracy>=80?0:accuracy>=50?1:2);
- if(level<4){$('summary-icon').textContent='🏆';$('summary-title').textContent='LEVEL '+(level+1)+' SELESAI!';$('summary-desc').textContent='Syabas! Anda berjaya menamatkan '+LEVELS[level].name+'. Sedia untuk cabaran seterusnya: '+LEVELS[level+1].emoji+' '+LEVELS[level+1].name+'?';$('next-btn').textContent='LEVEL SETERUSNYA ➡';$('next-btn').onclick=()=>loadLevel(level+1)}
- else{$('summary-icon').textContent='👑';$('summary-title').textContent='JUARA GEO BOWLING!';$('summary-desc').textContent='Anda menamatkan semua 40 soalan! Jumlah pin jatuh: '+totalScore+'. Hebat, pakar Geografi!';$('next-btn').textContent='MAIN SEMULA 🔄';$('next-btn').onclick=()=>{totalScore=0;loadLevel(0)}}
+ const finalAccuracy=Math.round(totalCorrect/40*100);$('summary-score').textContent=totalCorrect+'/40';$('summary-accuracy').textContent=finalAccuracy+'%';$('summary-icon').textContent='👑';$('summary-title').textContent='KEPUTUSAN AKHIR GEOGRAFI!';$('summary-desc').textContent='Jawapan betul: '+totalCorrect+' daripada 40 soalan. Ketepatan: '+finalAccuracy+'%. Jumlah pin jatuh: '+totalScore+'. Hebat, teruskan usaha!';$('summary-stars').textContent='⭐'.repeat(finalAccuracy>=80?3:finalAccuracy>=50?2:1)+'☆'.repeat(finalAccuracy>=80?0:finalAccuracy>=50?1:2);$('next-btn').textContent='MAIN SEMULA 🔄';$('next-btn').onclick=()=>{totalScore=0;totalCorrect=0;totalAsked=0;loadLevel(0,true)};
  $('summary-modal').classList.remove('hidden');if(window.confetti)confetti({particleCount:100,spread:95,origin:{y:.55}});
 }
-function loadLevel(n){
- level=n;round=1;score=0;correct=0;asked=0;usedQuestions=[];$('score-num').textContent='0';$('round-num').textContent='1';$('level-badge').textContent=n+1;$('level-num').textContent=n+1;$('theme-name').textContent=LEVELS[n].name;
- $('summary-modal').classList.add('hidden');$('level-intro').classList.remove('hidden');$('intro-emoji').textContent=LEVELS[n].emoji;$('intro-num').textContent=n+1;$('intro-name').textContent=LEVELS[n].name.toUpperCase();$('intro-tag').textContent=LEVELS[n].tag;
- buildScene();resetPins();setTimeout(()=>{$('level-intro').classList.add('hidden');showQuiz()},1500);
+function loadLevel(n,showIntro=false){
+ level=n;round=1;score=0;correct=0;asked=0;usedQuestions=[];$('score-num').textContent='0';$('round-num').textContent=(n*8)+1;$('level-badge').textContent=(n*8)+1;$('level-num').textContent=(n*8)+1;$('theme-name').textContent='Cabaran Geografi';
+ $('summary-modal').classList.add('hidden');buildScene();resetPins();
+ if(showIntro){$('level-intro').classList.remove('hidden');$('intro-emoji').textContent='🎳';$('intro-name').textContent='CABARAN GEOGRAFI';$('intro-tag').textContent='Jawab 40 soalan dalam satu permainan!';setTimeout(()=>{$('level-intro').classList.add('hidden');showQuiz()},1500)}else{$('level-intro').classList.add('hidden');showQuiz()}
 }
-$('start-btn').onclick=()=>{$('start-modal').classList.add('hidden');$('hud').classList.remove('hidden');initAudioUnlock();startMusic();loadLevel(0)};
+$('start-btn').onclick=()=>{$('start-modal').classList.add('hidden');$('hud').classList.remove('hidden');initAudioUnlock();startMusic();loadLevel(0,true)};
 function initAudioUnlock(){getAudio();sound(520,.08)}
 $('sound-btn').onclick=()=>{soundOn=!soundOn;musicOn=soundOn;$('sound-btn').textContent=soundOn?'🎵🔊':'🔇';if(soundOn){sound(600,.08);startMusic()}else{stopMusic()}};
 init3D();
